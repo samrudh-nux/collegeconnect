@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Helper Functions ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "jayrobin@gmail.com" ||
+        request.auth.token.email == "admin@collegeconnect.edu"
+      );
+    }
+
+    // --- User Profiles ---
+    match /userProfiles/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isOwner(userId);
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    // --- Global Feed ---
+    match /globalFeedMessages/{messageId} {
+      allow read, create: if isSignedIn();
+      allow update, delete: if isAdmin() || (isSignedIn() && resource.data.authorId == request.auth.uid);
+    }
+
+    // --- Chat System (Atomic Permission Protocol) ---
+    match /chatConversations/{conversationId} {
+      allow read, create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+    
+    // Explicit top-level match for subcollection list queries to avoid optimizer bottlenecks
+    match /chatConversations/{conversationId}/messages/{messageId} {
+      allow list: if isSignedIn();
+      allow get: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update, delete: if isAdmin();
+    }
+
+    // --- Membership Requests (Atomic Logic Branches) ---
+    match /groupJoinRequests/{requestId} {
+      allow list: if isSignedIn();
+      allow get: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.requesterId == request.auth.uid;
+      allow update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    // --- Game System (Atomic Logic Branches) ---
+    match /gameRequests/{gameRequestId} {
+      allow list: if isSignedIn();
+      allow get: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.requesterId == request.auth.uid;
+      allow update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    // --- Document Hub ---
+    match /documents/{documentId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.uploaderId == request.auth.uid;
+      allow update, delete: if isAdmin() || (isSignedIn() && request.auth.uid == request.resource.data.uploaderId);
+    }
+  }
+}

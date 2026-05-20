@@ -1,0 +1,216 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a student's profile within the CollegeConnect platform, storing personal information, game scores, and earned badges.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address, used for identification. (Not for storing authentication credentials).",
+          "format": "email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The first name of the student."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The last name of the student."
+        },
+        "collegeId": {
+          "type": "string",
+          "description": "Reference to the College the student belongs to."
+        },
+        "collegeName": {
+          "type": "string",
+          "description": "The full name of the student's college."
+        },
+        "bio": {
+          "type": "string",
+          "description": "A short biographical description provided by the student."
+        },
+        "interests": {
+          "type": "array",
+          "description": "A list of academic or professional interests.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "profileImageUrl": {
+          "type": "string",
+          "description": "URL to the student's profile picture.",
+          "format": "uri"
+        },
+        "highScore": {
+          "type": "number",
+          "description": "The highest score achieved by the student across all games."
+        },
+        "badgeNames": {
+          "type": "array",
+          "description": "A list of names of badges earned by the student.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enrolledCourseIds": {
+          "type": "array",
+          "description": "References to Courses the student is enrolled in.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "firstName",
+        "lastName",
+        "highScore",
+        "badgeNames",
+        "enrolledCourseIds"
+      ]
+    },
+    "ChatConversation": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ChatConversation",
+      "type": "object",
+      "description": "Represents a chat conversation, which can be one-to-one or a group chat.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ChatConversation entity."
+        },
+        "participantIds": {
+          "type": "array",
+          "description": "References to UserProfiles participating in this conversation.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "adminId": {
+          "type": "string",
+          "description": "The UID of the user who has administrative control over this group."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of chat conversation (e.g., 'one-to-one', 'group')."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the group chat."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the group's purpose."
+        },
+        "category": {
+          "type": "string",
+          "description": "The thematic category of the group."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the conversation was initiated.",
+          "format": "date-time"
+        },
+        "lastMessageTimestamp": {
+          "type": "string",
+          "description": "The timestamp of the most recent message in the conversation.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "participantIds",
+        "type",
+        "createdAt",
+        "lastMessageTimestamp"
+      ]
+    },
+    "GroupJoinRequest": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "GroupJoinRequest",
+      "type": "object",
+      "description": "A request from a student to join a specific community group.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "groupName": {
+          "type": "string"
+        },
+        "groupAdminId": {
+          "type": "string",
+          "description": "The UID of the administrator who must approve this request."
+        },
+        "requesterId": {
+          "type": "string"
+        },
+        "requesterName": {
+          "type": "string"
+        },
+        "requesterEmail": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "accepted", "rejected"]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["groupId", "groupAdminId", "requesterId", "status", "timestamp"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/userProfiles/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores individual student profiles."
+        }
+      },
+      {
+        "path": "/chatConversations/{conversationId}",
+        "definition": {
+          "entityName": "ChatConversation",
+          "schema": {
+            "$ref": "#/backend/entities/ChatConversation"
+          },
+          "description": "Represents a chat conversation. Admin control is tracked via adminId."
+        }
+      },
+      {
+        "path": "/groupJoinRequests/{requestId}",
+        "definition": {
+          "entityName": "GroupJoinRequest",
+          "schema": {
+            "$ref": "#/backend/entities/GroupJoinRequest"
+          },
+          "description": "Requests to join a group, pending admin approval."
+        }
+      }
+    ]
+  }
+}

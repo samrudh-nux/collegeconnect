@@ -1,0 +1,38 @@
+
+{
+  "welcomeStudent": {
+    "src": "https://png.pngtree.com/png-clipart/20250209/original/pngtree-cute-style-cartoon-style-college-student-graduation-photo-png-image_20401093.png",
+    "width": 600,
+    "height": 600,
+    "alt": "College Student Graduation",
+    "hint": "graduation student"
+  },
+  "ferrari": {
+    "src": "https://picsum.photos/seed/car-ferrari-red/400/250",
+    "width": 400,
+    "height": 250,
+    "alt": "Red Ferrari Sports Car",
+    "hint": "ferrari car"
+  },
+  "lamborghini": {
+    "src": "https://picsum.photos/seed/car-lambo-yellow/400/250",
+    "width": 400,
+    "height": 250,
+    "alt": "Yellow Lamborghini Supercar",
+    "hint": "lamborghini car"
+  },
+  "hypercar": {
+    "src": "https://picsum.photos/seed/car-hyper-blue/400/250",
+    "width": 400,
+    "height": 250,
+    "alt": "Blue Modern Hypercar",
+    "hint": "hypercar"
+  },
+  "supercar": {
+    "src": "https://picsum.photos/seed/car-super-green/400/250",
+    "width": 400,
+    "height": 250,
+    "alt": "Green Performance Sports Car",
+    "hint": "sportscar"
+  }
+}
