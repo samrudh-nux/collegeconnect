@@ -350,8 +350,6 @@ Please follow the existing code style (TypeScript strict, Tailwind classes, shad
 [![GitHub](https://img.shields.io/badge/GitHub-samrudh--nux-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/samrudh-nux)
 [![Live Project](https://img.shields.io/badge/Live-CollegeConnect-7C3AED?style=for-the-badge&logo=vercel&logoColor=white)](https://collegeconnect-samxv.vercel.app)
 
-> *"Built CollegeConnect from scratch — every line of code, every design decision, every feature — with absolute precision and a lot of hard work."*
-> — **Samrudh**
 
 </div>
 
